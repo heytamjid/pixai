@@ -1,0 +1,6 @@
+venv/
+model_task1.pth
+.env.example
+*.md
+__pycache__/
+

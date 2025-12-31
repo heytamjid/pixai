@@ -1,0 +1,32 @@
+# Meme Political Classifier API - Requirements
+
+# FastAPI and web server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Machine Learning
+torch==2.1.2
+torchvision==0.16.2
+numpy<2.0.0
+
+# Transformers and CLIP
+transformers==4.37.2
+sentencepiece==0.1.99
+ftfy==6.1.3
+regex==2023.12.25
+
+# CLIP (OpenAI)
+git+https://github.com/openai/CLIP.git
+
+# Google Gemini API
+google-generativeai==0.3.2
+
+# Image processing
+Pillow==10.2.0
+
+# Text processing
+emoji==1.4.1
+
+# Utilities
+pydantic==2.5.3

@@ -49,7 +49,7 @@ Return a SINGLE JSON object containing a list of strings.
         # Use Gemini 1.5 Flash for fast and efficient extraction
         self.model = genai.GenerativeModel("models/gemini-2.5-flash")
 
-    def extract_text(self, image: Image.Image) -> List[str]:
+    async def extract_text(self, image: Image.Image) -> List[str]:
         """
         Extract text from a meme image using Gemini API.
 
@@ -60,8 +60,10 @@ Return a SINGLE JSON object containing a list of strings.
             List of extracted text strings
         """
         try:
-            # Generate response from Gemini
-            response = self.model.generate_content([self.EXTRACTION_PROMPT, image])
+            # Generate response from Gemini (async)
+            response = await self.model.generate_content_async(
+                [self.EXTRACTION_PROMPT, image]
+            )
 
             # Parse the response
             raw_text = response.text

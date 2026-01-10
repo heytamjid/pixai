@@ -1,8 +1,3 @@
-"""
-PIXAI model architecture for meme classification.
-Adapted from PIXAI (1).ipynb
-"""
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -135,26 +130,13 @@ def load_model(
 
 
 def predict(model, tokenizer, preprocess, image, text, device="cuda", max_len=64):
-    """
-    Make a prediction on a meme image and text.
+    model.eval()  # deterministic
 
-    Args:
-        model: Trained PIXAI model
-        tokenizer: Text tokenizer
-        preprocess: CLIP image preprocessor
-        image: PIL Image
-        text: Normalized text string
-        device: Device to run inference on
-        max_len: Maximum sequence length
-
-    Returns:
-        Dictionary with prediction and confidence score
-    """
-    model.eval()
-
-    with torch.no_grad():
+    with torch.no_grad():  # not training
         # Process image
-        image_tensor = preprocess(image).unsqueeze(0).to(device)
+        image_tensor = (
+            preprocess(image).unsqueeze(0).to(device)
+        )  # (1, 3, H, W) # the first dim for unsquueze
 
         # Tokenize text
         inputs = tokenizer(

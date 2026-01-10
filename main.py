@@ -1,17 +1,3 @@
-"""
-FastAPI application for meme political classification.
-
-This API allows users to upload meme images and get predictions on whether
-the meme is political or non-political.
-
-Pipeline:
-1. Upload meme image
-2. Extract text using Gemini API
-3. Clean and normalize extracted text
-4. Predict using PIXAI model (image + text)
-5. Return prediction with confidence score
-"""
-
 import os
 from io import BytesIO
 from typing import Optional
@@ -28,12 +14,14 @@ import torch
 from gemini_extractor import GeminiTextExtractor
 from text_normalizer import process_extracted_text
 from model import load_model, predict
+from dotenv import load_dotenv
 
 
 # ===== Configuration =====
 class Config:
     """Application configuration."""
 
+    load_dotenv()
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
     MODEL_PATH = os.getenv("MODEL_PATH", "model_task1.pth")
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -122,14 +110,13 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# ===== Health Check Endpoint =====
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """Check if the API is running and models are loaded."""
@@ -138,18 +125,8 @@ async def health_check():
     )
 
 
-# ===== Main Prediction Endpoint =====
 @app.post("/predict", response_model=PredictionResponse)
 async def predict_meme(file: UploadFile = File(...)):
-    """
-    Upload a meme image and get a prediction.
-
-    Args:
-        file: Uploaded image file (JPEG, PNG, etc.)
-
-    Returns:
-        Prediction result with confidence score
-    """
     try:
         # Validate file type
         if not file.content_type.startswith("image/"):

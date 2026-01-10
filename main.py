@@ -140,7 +140,7 @@ async def predict_meme(file: UploadFile = File(...)):
 
         # Step 1: Extract text using Gemini
         print("Extracting text with Gemini...")
-        extracted_text = gemini_extractor.extract_text(image)
+        extracted_text = await gemini_extractor.extract_text(image)
 
         if not extracted_text:
             # If no text extracted, use empty string
